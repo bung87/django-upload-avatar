@@ -6,11 +6,63 @@
         <script type="text/javascript" src="{{ STATIC_URL }}jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}app.js"></script>
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}app.css" />
+         <link rel="stylesheet" href="{{ STATIC_URL }}imgareaselect/css/imgareaselect-default.css" type="text/css" />
+<script type="text/javascript" src="{{ STATIC_URL }}imgareaselect/jquery.imgareaselect.min.js"></script>
+<link rel="stylesheet" href="{% url 'uploadavatar_style' %}"/>
+<script type="text/javascript" src="{% url 'uploadavatar_script' %}"></script>
     </head>
     
     <body>
         <div style="width: 600px; margin: 30px auto;">
         {% include "upload_avatar/upload_avatar.html" %}
+         <script type="application/javascript">
+
+                  $('#uploadAvatarBtnLayout button').click(function(){
+                return false;
+            });
+
+            var input_width = $('#uploadAvatarBtnLayout').width();
+            var input_height = $('#uploadAvatarBtnLayout').height();
+
+            $('#uploadAvatarInputFile').css({opacity: 0}).width(input_width + 50).height(input_height).change(function(){
+                if($(this).val() == ''){return;}
+                var $last_img = $('#uploadAvatarSelectArea img');
+                if($last_img.length) {
+                    var img_obj = $last_img.imgAreaSelect({instance: true});
+                    img_obj.remove();
+                }
+                $('#uploadAvatarSelectArea').empty();
+                $('#uploadAvatarPreviewArea div').empty();
+                var p = new RegExp(/\.(jpg|jpeg|png|gif)$/);
+                var fileanme = $(this).val().toLowerCase().replace(/^\s+|\s+$/g, '');
+                if(!p.test(fileanme)){alert("{{ INVALID_IMAGE }}"); return;}
+                $('#uploadAvatarForm').submit();
+                $(this).val('');
+                $('#uploadAvatarCropSubmit').removeAttr('disabled');
+            });
+
+
+            $('#uploadAvatarCropSubmit').click(function(){
+                $(this).attr('disabled', 'disabled');
+                var x1 = $('#uploadAvatarValueX1').val();
+                var y1 = $('#uploadAvatarValueY1').val();
+                var x2 = $('#uploadAvatarValueX2').val();
+                var y2 = $('#uploadAvatarValueY2').val();
+                if(x1 == "" || y1 == "" || x2 == "" ||y2 == "") {
+                    $(this).removeAttr('disabled');
+                    return false;
+                }
+
+                $('#uploadAvatarCropForm').submit();
+                $('#uploadAvatarValueX1').val('');
+                $('#uploadAvatarValueY1').val('');
+                $('#uploadAvatarValueX2').val('');
+                $('#uploadAvatarValueY2').val('');
+
+                $(this).removeAttr('disabled');
+                return false;
+            });
+         </script>
         </div>
     </body>
 </html>
