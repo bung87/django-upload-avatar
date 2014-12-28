@@ -8,7 +8,9 @@ from functools import wraps
 from PIL import Image
 
 from django.http import HttpResponse
+from django.shortcuts import render_to_response
 from django.utils.crypto import get_random_string
+from django.template import RequestContext
 
 from .app_settings import (
     UPLOAD_AVATAR_TEST_FUNC as test_func,
@@ -156,3 +158,25 @@ def crop_avatar(request):
     return HttpResponse(
         "<script>window.parent.crop_avatar_success('%s')</script>"  % UPLOAD_AVATAR_TEXT['SUCCESS']
     )
+
+def upload_avatar_settings(request):
+    import json
+    from .app_settings import UPLOAD_AVATAR_WEB_LAYOUT, UPLOAD_AVATAR_TEXT
+
+    # uploadavatar_context = UPLOAD_AVATAR_WEB_LAYOUT.copy()
+    # uploadavatar_context.update(UPLOAD_AVATAR_TEXT)
+    return HttpResponse(content=json.dumps(UPLOAD_AVATAR_WEB_LAYOUT),content_type='application/json')
+
+def upload_avatar_style(request):
+    from .app_settings import UPLOAD_AVATAR_WEB_LAYOUT, UPLOAD_AVATAR_TEXT
+
+    uploadavatar_context = UPLOAD_AVATAR_WEB_LAYOUT.copy()
+    uploadavatar_context.update(UPLOAD_AVATAR_TEXT)
+    return render_to_response("upload_avatar/style.css",uploadavatar_context,content_type='text/css',context_instance=RequestContext(request))
+
+def upload_avatar_script(request):
+    from .app_settings import UPLOAD_AVATAR_WEB_LAYOUT, UPLOAD_AVATAR_TEXT
+
+    uploadavatar_context = UPLOAD_AVATAR_WEB_LAYOUT.copy()
+    uploadavatar_context.update(UPLOAD_AVATAR_TEXT)
+    return render_to_response("upload_avatar/script.js",uploadavatar_context,content_type='application/javascript',context_instance=RequestContext(request))

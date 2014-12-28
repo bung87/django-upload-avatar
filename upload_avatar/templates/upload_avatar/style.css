@@ -1,0 +1,40 @@
+        #uploadAvatarBtnLayout {
+            position: relative;
+        }
+
+        #uploadAvatarBtnLayout {
+            overflow: hidden;
+        }
+
+        #uploadAvatarBtnLayout button {
+            width: 100%;
+            height: 100%;
+        }
+
+        #uploadAvatarInputFile {
+            position: absolute;
+            top: 0;
+            left: -20px;
+            font-size: 300%;
+        }
+
+        #uploadAvatarSelectArea {
+            width: {{ crop_image_area_size }}px;
+            height: {{ crop_image_area_size }}px;
+            border: 1px solid #ddd;
+            overflow: hidden;
+            float: left;
+        }
+
+        #uploadAvatarPreviewArea {
+            float: right;
+        }
+
+        {% for p in preview_areas %}
+            #uploadAvatarPreviewArea{{ p.size }} {
+                width: {{ p.size }}px;
+                height: {{ p.size }}px;
+                border: 1px solid #ddd;
+                overflow: hidden;
+            }
+        {% endfor %}
